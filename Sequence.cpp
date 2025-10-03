@@ -1,0 +1,1 @@
+// Comment here to make change to Sequence.cpp to test commit process from within CLion

@@ -15,3 +15,5 @@ int main() {
 
     return 0;
 }
+
+// Comment here to make change to SequenceDebug.cpp to test commit process from within CLion

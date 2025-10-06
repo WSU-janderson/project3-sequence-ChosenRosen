@@ -1,47 +1,108 @@
 #include "Sequence.h"
+#include <exception>
 
 // Creates an empty sequence (numElts == 0) or a sequence of numElts items
 // indexed from 0 ... (numElts - 1).
-Sequence::Sequence(size_t sz) {
-
+Sequence::Sequence(size_t sz) : head(nullptr), tail(nullptr), length(sz) {
+    for (int i = 0; i < sz; ++i) {
+        push_back("");
+    }
 }
 
 // Creates a (deep) copy of sequence s
 Sequence::Sequence(const Sequence& s) {
+    if (s.head == nullptr) {
+        this->head = nullptr;
+        this->tail = nullptr;
+        this->length = 0;
+    }
+    else {
+        this->length = s.length;
+        const SequenceNode* origCurr = s.head;
 
+        this->head = new SequenceNode(origCurr->item);
+        SequenceNode* copyCurr = this->head;
+        while (origCurr->next != nullptr) {
+            origCurr = origCurr->next;
+            const auto temp = new SequenceNode(origCurr->item);
+            temp->prev = copyCurr;
+            copyCurr->next = temp;
+            copyCurr = temp;
+        }
+        this->tail = copyCurr;
+    }
 }
 // Destroys all items in the sequence and release the memory
 // associated with the sequence
 Sequence::~Sequence() {
-
+    clear();
 }
 
 // The current sequence is released and replaced by a (deep) copy of sequence
 // s. A reference to the copied sequence is returned (return *this;).
 Sequence& Sequence::operator=(const Sequence& s) {
-    Sequence outSeq = Sequence();
-    return outSeq;
+    if (this != &s) {
+        clear();
+        const auto temp = new Sequence(s);
+        this->head = temp->head;
+        this->tail = temp->tail;
+        this->length = temp->length;
+    }
+    return *this;
 }
-
 
 // The position satisfies ( position >= 0 && position <= last_index() ).
 // The return value is a reference to the item at index position in the
 // sequence. Throws an exception if the position is outside the bounds
 // of the sequence
 std::string& Sequence::operator[](size_t position) {
-    std::string outStr = "";
-    return outStr;
+    if (position<0 || position>=(length)) {
+        throw std::exception();
+    }
+    else if (position < length / 2) {
+        SequenceNode* currNode = head;
+        for (int i=0; i<position; ++i) {
+            currNode = currNode->next;
+        }
+        return currNode->item;
+    }
+    else {
+        SequenceNode* currNode = tail;
+        for (int i=length - 1; i>position; --i) {
+            currNode = currNode->prev;
+        }
+        return currNode->item;
+    }
 }
 
-// The value of item is append to the sequence.
+// The value of item is appended to the sequence.
 void Sequence::push_back(std::string item) {
-
+    if (length == 0) {
+        head = new SequenceNode(item);
+        tail = head;
+    }
+    else {
+        const auto appendNode = new SequenceNode(item);
+        appendNode->prev = tail;
+        tail->next = appendNode;
+        tail = appendNode;
+    }
+    ++length;
 }
 
 // The item at the end of the sequence is deleted and size of the sequence is
 // reduced by one. If sequence was empty, throws an exception
 void Sequence::pop_back() {
-
+    if (length == 0) {
+        throw std::exception();
+    }
+    else {
+        const SequenceNode* temp = tail;
+        tail = tail->prev;
+        tail->next = nullptr;
+        delete temp;
+        --length;
+    }
 }
 
 // The position satisfies ( position >= 0 && position <= last_index() ). The
@@ -93,7 +154,18 @@ size_t Sequence::size() const {
 // sequence is released, resetting the sequence to an empty state that can have
 // items re-inserted.
 void Sequence::clear() {
-
+    SequenceNode* currNode = this->head;
+    if (currNode != nullptr) {
+        while (currNode->next != nullptr) {
+            const SequenceNode* target = currNode;
+            currNode = currNode->next;
+            delete target;
+        }
+        delete currNode;
+        this->head = nullptr;
+        this->tail = nullptr;
+        this->length = 0;
+    }
 }
 
 // The item at position is removed from the sequence, and the memory

@@ -14,7 +14,7 @@
  * If sz = 0 or sz parameter is omitted, effectively default constructor.
  * WARNING: default constructor creates empty sequence with head and tail fields remaining nullptr.
  */
-Sequence::Sequence(const size_t sz) : head(nullptr), tail(nullptr), length(sz) {
+Sequence::Sequence(const size_t sz) : head(nullptr), tail(nullptr), length(0) {
     for (size_t i = 0; i < sz; ++i) {
         push_back("");
     }
@@ -89,12 +89,15 @@ std::string& Sequence::operator[](const size_t position) const {
  * This is *not* a method of the Sequence class, but instead it is a friend function
  */
 std::ostream& operator<<(std::ostream& os, const Sequence& s) {
-    if (!s.empty()) {
+    if (s.empty()) {
+        os << "<>";
+    }
+    else {
         const Sequence::SequenceNode* currNode = s.head;
         os << "<" + currNode->item;
         while (currNode->next != nullptr) {
             currNode = currNode->next;
-            os << ", " + currNode->item;
+            os << "," + currNode->item;
         }
         os << ">";
     }
@@ -220,9 +223,6 @@ void Sequence::insert(const size_t position, const std::string& item) {
     else if (position == 0) {
         push_front(item); // If insertion occurs at front of sequence
     }
-    else if (position == length - 1) {
-        push_back(item); // If insertion occurs at back of sequence
-    }
     else {
         SequenceNode* nodeBeforeInsert = getNodePtr(position - 1);
         auto* insertNode = new SequenceNode(item);
@@ -242,6 +242,9 @@ void Sequence::pop_front() {
     if (empty()) {
         throw std::exception();
     }
+    else if (length == 1) {
+        clear();
+    }
     else {
         const SequenceNode* temp = head;
         head = head->next;
@@ -258,6 +261,9 @@ void Sequence::pop_front() {
 void Sequence::pop_back() {
     if (empty()) {
         throw std::exception();
+    }
+    else if (length == 1) {
+        clear();
     }
     else {
         const SequenceNode* temp = tail;

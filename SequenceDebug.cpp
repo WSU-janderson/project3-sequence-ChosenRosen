@@ -1,18 +1,12 @@
-/**
- * SequenceDebug.cpp
- * Project 3
- * CS 3100
- *
- * In this file, you will write your tests as you implement Sequence. If you are using CLion, you need to select
- * SequenceDebug from the drop-down menu next to the Build (hammer icon) if it is on SequenceTestHarness
- */
 #include <iostream>
+#include "Sequence.cpp"
 
-using namespace std;
-
+/*
+ * Greg Rosen
+ * Project 3: Sequence
+ * Tests for implementation of Sequence Class
+ */
 int main() {
-    cout << "Your project is ready to go!" << endl;
-
     return 0;
 }
 

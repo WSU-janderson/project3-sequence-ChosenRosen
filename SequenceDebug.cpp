@@ -28,13 +28,13 @@ void SeqManipTest() {
     std::cout << "Negative index in brackets should throw exception..." << std::endl;
     try {
         testSeq[-1] = "-one";
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "OOB positive index in brackets should throw exception..." << std::endl;
     try {
         testSeq[5] = "five";
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown" << std::endl;
     }
     std::cout << "Fill sequence using brackets..." << std::endl;
@@ -57,7 +57,7 @@ void SeqManipTest() {
     std::cout << "pop_back should throw exception on empty sequence...";
     try {
         testSeq.pop_back();
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "Add elements back one-by-one using push_back..." << std::endl;
@@ -85,7 +85,7 @@ void SeqManipTest() {
     std::cout << "pop_front should throw exception on empty sequence...";
     try {
         testSeq.pop_front();
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "Add elements back one-by-one using push_front..." << std::endl;
@@ -140,49 +140,49 @@ void SeqManipTest() {
     std::cout << "Erase should throw exception if index negative...";
     try {
         testSeq.erase(-1);
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "Erase should throw exception if index OOB...";
     try {
         testSeq.erase(5);
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "Insert should throw exception if index negative...";
     try {
         testSeq.insert(-1, "-one");
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "Insert should throw exception if index OOB...";
     try {
         testSeq.insert(5, "five");
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "Erase(range) should throw exception if count zero...";
     try {
         testSeq.erase(1, 0);
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "Erase(range) should throw exception if position negative...";
     try {
         testSeq.erase(-1, 1);
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "Erase(range) should throw exception if position OOB...";
     try {
         testSeq.erase(5, 1);
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "Erase(range) should throw exception if final removal index OOB...";
     try {
         testSeq.erase(3, 3);
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "Making assignment copy of sequence..." << std::endl;
@@ -219,7 +219,7 @@ void emptyTest() {
     std::cout << "Subscript operator should throw exception..." << std::endl;
     try {
         std::cout << testSeq[0] << std::endl;
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "Stream insertion operator should return <>..." << std::endl;
@@ -227,13 +227,13 @@ void emptyTest() {
     std::cout << "Front method should throw exception..." << std::endl;
     try {
         std::cout << testSeq.front() << std::endl;
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "Back method should throw exception..." << std::endl;
     try {
         std::cout << testSeq.back() << std::endl;
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "size method should return 0..." << std::endl;
@@ -243,31 +243,31 @@ void emptyTest() {
     std::cout << "insert method should throw exception..." << std::endl;
     try {
         testSeq.insert(0, "Hello");
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "pop-front method should throw exception..." << std::endl;
     try {
         testSeq.pop_front();
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "pop-back method should throw exception..." << std::endl;
     try {
         testSeq.pop_back();
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "erase method should throw exception..." << std::endl;
     try {
         testSeq.erase(0);
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "erase(range) method should throw exception..." << std::endl;
     try {
         testSeq.erase(0, 5);
-    } catch (...) {
+    } catch (std::exception& e) {
         std::cout << "Exception thrown!" << std::endl;
     }
     std::cout << "clear method should leave sequence unchanged" << std::endl;

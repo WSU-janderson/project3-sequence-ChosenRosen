@@ -8,13 +8,63 @@
 
 void emptyTest();
 void SeqManipTest();
+void memLeakTest();
 
 int main() {
     emptyTest();
     SeqManipTest();
+    memLeakTest();
     return 0;
 }
 
+/*
+ * Tests for memory leaks of constructors/destructors and methods of Sequence/SequenceNode classes
+ */
+void memLeakTest() {
+    int i = 0;
+    constexpr int LOOP_LIMIT = 1e6; // # iterations for loops for memleak testing
+    // Constructor(s)/destructors and assignment operator
+    for (i = 0; i < LOOP_LIMIT; ++i) {
+        const Sequence testSeq(10);
+        Sequence copySeq1(testSeq);
+        Sequence copySeq2(10);
+        copySeq2=testSeq;
+    }
+    // Remaining methods other than stream insertion operator
+    for (i = 0; i < LOOP_LIMIT; ++i) {
+        Sequence testSeq(5);
+        testSeq[0] = "zero";
+        testSeq[1] = "one";
+        testSeq[2] = "two";
+        testSeq[3] = "three";
+        testSeq[4] = "four";
+        testSeq.push_back("Blarg");
+        testSeq.pop_back();
+        testSeq.push_front("Blarg");
+        testSeq.pop_front();
+        testSeq.insert(0,"Blarg");
+        testSeq.erase(0);
+        testSeq.insert(4,"Blarg");
+        testSeq.erase(4);
+        testSeq.insert(2,"Blarg");
+        testSeq.erase(2);
+        testSeq.erase(0,2);
+        testSeq.push_front("one");
+        testSeq.push_front("zero");
+        testSeq.erase(3,2);
+        testSeq.push_back("three");
+        testSeq.push_back("four");
+        testSeq.erase(1,3);
+        testSeq.insert(1,"three");
+        testSeq.insert(1,"two");
+        testSeq.insert(1,"one");
+        testSeq.clear();
+    }
+}
+
+/*
+ * Tests for methods for manipulating Sequence object
+ */
 void SeqManipTest() {
     Sequence testSeq(5);
     std::cout << "____Testing behavior of parameterized-constructed sequence of size 5____" << std::endl;
@@ -203,16 +253,11 @@ void SeqManipTest() {
     testCopy.clear();
     std::cout << "Copy Sequence: " << testCopy << std::endl;
     std::cout << "Orig Sequence: " << testSeq << std::endl;
-    std::cout << "New copy sequence, put on the heap.." << std::endl;
-    const auto* testPtr = new Sequence(testSeq);
-    std::cout << "Heap Sequence: " << *testPtr << std::endl;
-    std::cout << "Orig Sequence: " << testSeq << std::endl;
-    std::cout << "Test destructor for sequence..." << std::endl;
-    delete testPtr;
-    std::cout << "Heap Sequence: " << *testPtr << std::endl;
-    std::cout << "Orig Sequence: " << testSeq << std::endl;
 }
 
+/*
+ * Tests for correct operation of Sequence methods when Sequence is empty
+ */
 void emptyTest() {
     Sequence testSeq;
     std::cout << "____Testing behavior of default-constructed empty sequence____" << std::endl;

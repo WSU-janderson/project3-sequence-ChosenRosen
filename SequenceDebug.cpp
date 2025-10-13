@@ -14,6 +14,7 @@ int main() {
     emptyTest();
     SeqManipTest();
     memLeakTest();
+    std::cout << "____Testing Complete____";
     return 0;
 }
 
@@ -21,16 +22,18 @@ int main() {
  * Tests for memory leaks of constructors/destructors and methods of Sequence/SequenceNode classes
  */
 void memLeakTest() {
-    int i = 0;
-    constexpr int LOOP_LIMIT = 1e6; // # iterations for loops for memleak testing
-    // Constructor(s)/destructors and assignment operator
+    size_t i = 0;
+    constexpr size_t LOOP_LIMIT = 1e6; // # iterations for loops for testing
+    std::cout << "____Testing for memory leaks____" << std::endl;
+    std::cout << "Testing for Constructor(s)/destructors, assignment overload, and subscript overload..." << std::endl;
     for (i = 0; i < LOOP_LIMIT; ++i) {
         const Sequence testSeq(10);
         Sequence copySeq1(testSeq);
-        Sequence copySeq2(10);
+        Sequence copySeq2(8);
         copySeq2=testSeq;
     }
-    // Remaining methods other than stream insertion operator
+    std::cout << "Complete" << std::endl;
+    std::cout << "Testing for remaining methods..." << std::endl;
     for (i = 0; i < LOOP_LIMIT; ++i) {
         Sequence testSeq(5);
         testSeq[0] = "zero";
@@ -60,6 +63,7 @@ void memLeakTest() {
         testSeq.insert(1,"one");
         testSeq.clear();
     }
+    std::cout << "Complete" << std::endl;
 }
 
 /*

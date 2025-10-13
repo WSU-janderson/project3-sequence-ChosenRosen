@@ -64,25 +64,13 @@ Sequence::~Sequence() {
 Sequence& Sequence::operator=(const Sequence& s) {
     if (this != &s) {
         clear();
-        if (s.empty()) { // If s is empty, then copy sequence will also be empty
-            this->head = nullptr;
-            this->tail = nullptr;
-            this->length = 0;
-        }
-        else {
-            this->length = s.length;
-            const SequenceNode* origCurr = s.head; // Node of original sequence currently being handled
-            this->head = new SequenceNode(origCurr->item);
-            SequenceNode* copyCurr = this->head; // Node of copy sequence currently being handled
-            while (origCurr->next != nullptr) {
-                origCurr = origCurr->next;
-                const auto temp = new SequenceNode(origCurr->item);
-                temp->prev = copyCurr;
-                copyCurr->next = temp;
-                copyCurr = temp;
-            }
-            this->tail = copyCurr;
-        }
+        Sequence temp(s); // Create temporary deep copy of s, and copy fields to this.
+        this->head = temp.head;
+        this->tail = temp.tail;
+        this->length = temp.length;
+        temp.head = nullptr; // temp head and tail must be set to nullptr to avoid deletion of copied sequence.
+        temp.tail = nullptr;
+        temp.length = 0; // temp length must be set to zero to ensure clear() method called by destructor works correctly.
     }
     return *this;
 }
@@ -100,7 +88,8 @@ std::string& Sequence::operator[](const size_t position) const {
 /*
  * Stream insertion operator overload
  * Outputs all items of sequence as a single string to the given output stream
- * ex: For a given six-item sequence: "<4, 8, 15, 16, 23, 42>"
+ * ex: For a given six-item sequence: "<4,8,15,16,23,42>"
+ * Outputs <> for an empty sequence
  * This is *not* a method of the Sequence class, but instead it is a friend function
  */
 std::ostream& operator<<(std::ostream& os, const Sequence& s) {
